@@ -1,8 +1,7 @@
-import '../styles/globals.css'
-import '@fontsource/roboto';
+import '@fontsource/roboto'
 import type { AppProps } from 'next/app'
 
-function MyApp({ Component, pageProps }: AppProps) {
+const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   return <Component {...pageProps} />
 }
 export default MyApp

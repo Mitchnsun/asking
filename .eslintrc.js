@@ -4,14 +4,15 @@ module.exports = {
   env: {
     node: true,
     es6: true,
+    jest: true,
   },
-  parserOptions: { ecmaVersion: 8 }, // to enable features such as async/await
+  parserOptions: { ecmaVersion: 8, sourceType: 'module' }, // to enable features such as async/await
   ignorePatterns: ['node_modules/*', '.next/*', '.out/*', '!.prettierrc.js'], // We don't want to lint generated files nor node_modules, but we want to lint .prettierrc.js (ignored by default by eslint)
   extends: ['eslint:recommended'],
   overrides: [
     // This configuration will apply only to TypeScript files
     {
-      files: ['**/*.ts', '**/*.tsx'],
+      files: ['**/*.ts', '**/*.tsx', '**/*.js'],
       parser: '@typescript-eslint/parser',
       settings: { react: { version: 'detect' } },
       env: {
@@ -26,6 +27,7 @@ module.exports = {
         'plugin:react-hooks/recommended', // React hooks rules
         'plugin:jsx-a11y/recommended', // Accessibility rules
         'plugin:prettier/recommended',
+        'plugin:cypress/recommended',
       ],
       rules: {
         // We will use TypeScript's types for component props instead
