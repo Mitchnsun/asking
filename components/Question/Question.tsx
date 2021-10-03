@@ -23,7 +23,7 @@ const schema = yup.object({
   answer: yup.string().required('Indiquer votre réponse'),
 })
 
-const Question = (): JSX.Element => {
+const Question = ({ id, question }: { id: string; question: string }): JSX.Element => {
   const classes = useStyles()
   const [status, setStatus] = useState<string>()
   const {
@@ -34,7 +34,7 @@ const Question = (): JSX.Element => {
 
   const onSubmit = ({ answer }: { answer: string }): Promise<void> =>
     axios
-      .post('/api/answer', { answer })
+      .post('/api/answer', { answer, id })
       .then((result) => setStatus(result.data.success ? 'success' : 'wrong'))
       .catch(() => setStatus('error'))
 
@@ -51,7 +51,7 @@ const Question = (): JSX.Element => {
       >
         <Grid item>
           <Typography component="h2" variant="h5">
-            Quel est le premier président de la Vième République ?
+            {question}
           </Typography>
         </Grid>
         <Grid item>
@@ -71,19 +71,20 @@ const Question = (): JSX.Element => {
             )}
           />
         </Grid>
-        {status ? (
-          <Grid item>
-            {status === 'error' && <Alert severity="error">Une erreur est survenue</Alert>}
-            {status === 'wrong' && <Alert severity="warning">Mauvaise réponse</Alert>}
-            {status === 'success' && <Alert severity="success">Bravo !</Alert>}
-          </Grid>
-        ) : (
-          <Grid item style={{ alignSelf: 'flex-end' }}>
-            <Button type="submit" variant="contained" color="primary">
+        <Grid item container spacing={1} justifyContent="flex-end" alignItems="center">
+          {status ? (
+            <Grid item style={{ flexGrow: 1 }} xs={12} sm={8}>
+              {status === 'error' && <Alert severity="error">Une erreur est survenue</Alert>}
+              {status === 'wrong' && <Alert severity="warning">Mauvaise réponse</Alert>}
+              {status === 'success' && <Alert severity="success">Bravo !</Alert>}
+            </Grid>
+          ) : null}
+          <Grid item xs={6} sm={4}>
+            <Button type="submit" variant="contained" color="primary" fullWidth>
               Répondre
             </Button>
           </Grid>
-        )}
+        </Grid>
       </Grid>
     </Paper>
   )

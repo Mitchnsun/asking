@@ -1,7 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { Db, ObjectId } from 'mongodb'
+
+import { withMongo } from '../../lib/mongodb'
 import * as utils from '../../utils/string.utils'
 const ANSWER_TOLERANCE = 0.7
-const temp = ['Charles de Gaulle', 'Général de Gaulle', 'De Gaulle']
 
 type Answer = {
   answers: string[]
@@ -15,10 +17,14 @@ type Answer = {
 }
 
 const post = async (req: NextApiRequest, res: NextApiResponse<Answer>): Promise<void> => {
-  const { answer } = req.body
+  const { answer, id } = req.body
   const normalizeAnswer = utils.normalize(answer).toLowerCase()
+  const result = await withMongo<{ answers: string[] }>(async (db: Db) => {
+    const collection = db.collection('questions')
+    return await collection.findOne({ _id: new ObjectId(id) }, { answers: 1 })
+  })
 
-  const verification = temp.map((item) => ({
+  const verification = (result.answers || []).map((item) => ({
     answer: item,
     strict: normalizeAnswer === utils.normalize(item).toLowerCase(),
     contain: normalizeAnswer.includes(utils.normalize(item).toLowerCase()),
@@ -28,7 +34,7 @@ const post = async (req: NextApiRequest, res: NextApiResponse<Answer>): Promise<
   res.status(200).json({
     success: selection.strict || selection.contain || selection.similar >= ANSWER_TOLERANCE,
     selection,
-    answers: temp,
+    answers: result.answers,
   })
 }
 
