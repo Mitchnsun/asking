@@ -8,7 +8,7 @@
     "start": "next start",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
     "lint": "eslint --ext js,jsx,ts,tsx ./",
-    "test": "yarn lint && jest",
+    "test": "yarn lint && yarn type-check && jest",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "cy:test": "start-server-and-test start http://localhost:3000 cy:run",

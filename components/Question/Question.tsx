@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Button, Grid, TextField, Typography, Paper, makeStyles } from '@material-ui/core'
+import { Button, CircularProgress, Grid, TextField, Typography, Paper, makeStyles } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import axios from 'axios'
 
@@ -32,11 +32,17 @@ const Question = ({ id, question }: { id: string; question: string }): JSX.Eleme
     formState: { errors },
   } = useForm<{ answer: string }>({ resolver: yupResolver(schema) })
 
-  const onSubmit = ({ answer }: { answer: string }): Promise<void> =>
-    axios
+  const onSubmit = ({ answer }: { answer: string }): Promise<void> => {
+    setStatus('loading')
+    return axios
       .post('/api/answer', { answer, id })
-      .then((result) => setStatus(result.data.success ? 'success' : 'wrong'))
-      .catch(() => setStatus('error'))
+      .then((result) => {
+        setStatus(result.data.success ? 'success' : 'wrong')
+      })
+      .catch(() => {
+        setStatus('error')
+      })
+  }
 
   return (
     <Paper className={classes.question} elevation={3}>
@@ -72,7 +78,7 @@ const Question = ({ id, question }: { id: string; question: string }): JSX.Eleme
           />
         </Grid>
         <Grid item container spacing={1} justifyContent="flex-end" alignItems="center">
-          {status ? (
+          {status && status !== 'loading' ? (
             <Grid item style={{ flexGrow: 1 }} xs={12} sm={8}>
               {status === 'error' && <Alert severity="error">Une erreur est survenue</Alert>}
               {status === 'wrong' && <Alert severity="warning">Mauvaise réponse</Alert>}
@@ -80,8 +86,8 @@ const Question = ({ id, question }: { id: string; question: string }): JSX.Eleme
             </Grid>
           ) : null}
           <Grid item xs={6} sm={4}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-              Répondre
+            <Button type="submit" variant="contained" color="primary" disabled={status === 'loading'} fullWidth>
+              Répondre {status === 'loading' && <CircularProgress size={20} color="secondary" style={{ marginLeft: 10 }} />}
             </Button>
           </Grid>
         </Grid>

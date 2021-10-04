@@ -3,38 +3,46 @@ import { Db, ObjectId } from 'mongodb'
 
 import { withMongo } from '../../lib/mongodb'
 import * as utils from '../../utils/string.utils'
-const ANSWER_TOLERANCE = 0.7
+const ANSWER_TOLERANCE = 0.75
+
+type Selection = {
+  answer: string
+  contain: boolean
+  similar: number
+  strict: boolean
+}
 
 type Answer = {
   answers: string[]
-  selection: {
-    answer: string
-    contain: boolean
-    similar: number
-    strict: boolean
-  }
+  selection: Selection
+  video?: string
+  wiki?: string
   success: boolean
 }
 
 const post = async (req: NextApiRequest, res: NextApiResponse<Answer>): Promise<void> => {
   const { answer, id } = req.body
   const normalizeAnswer = utils.normalize(answer).toLowerCase()
-  const result = await withMongo<{ answers: string[] }>(async (db: Db) => {
+  const result = await withMongo(async (db: Db) => {
     const collection = db.collection('questions')
-    return await collection.findOne({ _id: new ObjectId(id) }, { answers: 1 })
+    return await collection.findOne({ _id: new ObjectId(id) }, { projection: { answers: 1, video: 1, wiki: 1 } })
   })
 
-  const verification = (result.answers || []).map((item) => ({
+  const { answers, video, wiki } = result || {}
+
+  const verification = (answers || []).map((item: string) => ({
     answer: item,
     strict: normalizeAnswer === utils.normalize(item).toLowerCase(),
     contain: normalizeAnswer.includes(utils.normalize(item).toLowerCase()),
     similar: utils.similarity(answer, item),
   }))
-  const selection = verification.reduce((prev, curr) => (prev.similar > curr.similar ? prev : curr))
+  const selection = verification.reduce((prev: Selection, curr: Selection) => (prev.similar > curr.similar ? prev : curr))
   res.status(200).json({
-    success: selection.strict || selection.contain || selection.similar >= ANSWER_TOLERANCE,
+    success: selection.strict || selection.contain || selection.similar > ANSWER_TOLERANCE,
     selection,
-    answers: result.answers,
+    answers,
+    video,
+    wiki,
   })
 }
 
