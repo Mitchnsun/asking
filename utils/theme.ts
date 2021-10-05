@@ -1,26 +1,26 @@
-import { createTheme, adaptV4Theme } from '@mui/material/styles'
+import { createTheme } from '@mui/material/styles'
 
-const theme = createTheme(
-  adaptV4Theme({
-    palette: {
-      background: {
-        default: '#2B4141',
-      },
-      primary: {
-        main: '#0EB1D2',
-      },
-      secondary: {
-        main: '#C8C2AE',
-      },
+const theme = createTheme({
+  palette: {
+    background: {
+      default: '#023047',
     },
-    overrides: {
-      MuiPaper: {
+    primary: {
+      main: '#8ecae6',
+    },
+    secondary: {
+      main: '#ffb703',
+    },
+  },
+  components: {
+    MuiPaper: {
+      styleOverrides: {
         root: {
           backgroundColor: '#F7F7FF',
         },
       },
     },
-  })
-)
+  },
+})
 
 export default theme
