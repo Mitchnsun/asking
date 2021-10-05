@@ -5,6 +5,14 @@ import * as yup from 'yup'
 import { Button, CircularProgress, Grid, TextField, Typography, Paper, makeStyles } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import axios from 'axios'
+import Link from 'next/link'
+
+interface State {
+  status?: string
+  next?: string
+  video?: string
+  wiki?: string
+}
 
 const useStyles = makeStyles({
   question: {
@@ -25,22 +33,29 @@ const schema = yup.object({
 
 const Question = ({ id, question }: { id: string; question: string }): JSX.Element => {
   const classes = useStyles()
-  const [status, setStatus] = useState<string>()
+  const [state, setState] = useState<State>({})
+  const { status } = state
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<{ answer: string }>({ resolver: yupResolver(schema) })
 
   const onSubmit = ({ answer }: { answer: string }): Promise<void> => {
-    setStatus('loading')
+    setState({ status: 'loading' })
     return axios
       .post('/api/answer', { answer, id })
       .then((result) => {
-        setStatus(result.data.success ? 'success' : 'wrong')
+        setState({
+          status: result.data.success ? 'success' : 'wrong',
+          next: result.data.next,
+          video: result.data.video,
+          wiki: result.data.wiki,
+        })
       })
       .catch(() => {
-        setStatus('error')
+        setState({ status: 'error' })
       })
   }
 
@@ -86,9 +101,26 @@ const Question = ({ id, question }: { id: string; question: string }): JSX.Eleme
             </Grid>
           ) : null}
           <Grid item xs={6} sm={4}>
-            <Button type="submit" variant="contained" color="primary" disabled={status === 'loading'} fullWidth>
-              Répondre {status === 'loading' && <CircularProgress size={20} color="secondary" style={{ marginLeft: 10 }} />}
-            </Button>
+            {state.next ? (
+              <Link href={`/trivia/${state.next}`} passHref>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  size="large"
+                  fullWidth
+                  onClick={() => {
+                    setValue('answer', '')
+                    setState({})
+                  }}
+                >
+                  Suite
+                </Button>
+              </Link>
+            ) : (
+              <Button type="submit" variant="contained" color="primary" disabled={status === 'loading'} fullWidth>
+                Répondre {status === 'loading' && <CircularProgress size={20} color="secondary" style={{ marginLeft: 10 }} />}
+              </Button>
+            )}
           </Grid>
         </Grid>
       </Grid>

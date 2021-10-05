@@ -17,19 +17,22 @@ type Answer = {
   selection: Selection
   video?: string
   wiki?: string
+  next: string
   success: boolean
 }
 
 const post = async (req: NextApiRequest, res: NextApiResponse<Answer>): Promise<void> => {
   const { answer, id } = req.body
   const normalizeAnswer = utils.normalize(answer).toLowerCase()
+
+  // Get data from question
   const result = await withMongo(async (db: Db) => {
     const collection = db.collection('questions')
     return await collection.findOne({ _id: new ObjectId(id) }, { projection: { answers: 1, video: 1, wiki: 1 } })
   })
 
+  // Verification good or bad answer
   const { answers, video, wiki } = result || {}
-
   const verification = (answers || []).map((item: string) => ({
     answer: item,
     strict: normalizeAnswer === utils.normalize(item).toLowerCase(),
@@ -37,12 +40,21 @@ const post = async (req: NextApiRequest, res: NextApiResponse<Answer>): Promise<
     similar: utils.similarity(answer, item),
   }))
   const selection = verification.reduce((prev: Selection, curr: Selection) => (prev.similar > curr.similar ? prev : curr))
+
+  // Fetch next question
+  const next = await withMongo(async (db: Db) => {
+    const collection = db.collection('questions')
+    return await collection.aggregate([{ $sample: { size: 2 } }]).toArray()
+  })
+  const { _id } = (next?.filter((q) => q._id.toString() !== id) || [])[0]
+
   res.status(200).json({
     success: selection.strict || selection.contain || selection.similar > ANSWER_TOLERANCE,
     selection,
     answers,
     video,
     wiki,
+    next: _id.toString(),
   })
 }
 
