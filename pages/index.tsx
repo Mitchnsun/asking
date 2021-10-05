@@ -1,14 +1,13 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { Button, CssBaseline, Grid, ThemeProvider } from '@material-ui/core'
+import { Button, CssBaseline, Grid } from '@mui/material'
 import type { Db } from 'mongodb'
 
-import theme from '../utils/theme'
 import { withMongo } from '../lib/mongodb'
 
 export default function Home({ id }: { id: string }): JSX.Element {
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Head>
         <title>Play Trivia</title>
         <meta name="description" content="Play trivia" />
@@ -24,7 +23,7 @@ export default function Home({ id }: { id: string }): JSX.Element {
           </Link>
         </Grid>
       </Grid>
-    </ThemeProvider>
+    </>
   )
 }
 

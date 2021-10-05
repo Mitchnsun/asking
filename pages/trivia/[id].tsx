@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
-import { CssBaseline, Grid, ThemeProvider } from '@material-ui/core'
+import { CssBaseline, Grid, ThemeProvider } from '@mui/material'
 import { Db, ObjectId } from 'mongodb'
 
 import theme from '../../utils/theme'
