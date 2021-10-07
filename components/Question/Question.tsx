@@ -7,6 +7,8 @@ import { makeStyles } from '@mui/styles'
 import axios from 'axios'
 import Link from 'next/link'
 
+import CategoryTag from '../atoms/CategoryTag'
+
 interface State {
   status?: string
   next?: string
@@ -19,10 +21,8 @@ const useStyles = makeStyles({
     margin: 'auto',
     padding: '1rem',
     maxWidth: 550,
-    height: 300,
   },
   container: {
-    height: '100%',
     justifyContent: 'space-around',
   },
 })
@@ -31,7 +31,7 @@ const schema = yup.object({
   answer: yup.string().required('Indiquer votre réponse'),
 })
 
-const Question = ({ id, question }: { id: string; question: string }): JSX.Element => {
+const Question = ({ id, question, category }: { id: string; question: string; category: string }): JSX.Element => {
   const classes = useStyles()
   const [state, setState] = useState<State>({})
   const { status } = state
@@ -70,6 +70,9 @@ const Question = ({ id, question }: { id: string; question: string }): JSX.Eleme
         onSubmit={handleSubmit(onSubmit)}
         autoComplete="off"
       >
+        <Grid item>
+          <CategoryTag cat={category} />
+        </Grid>
         <Grid item>
           <Typography component="h2" variant="h5">
             {question}
