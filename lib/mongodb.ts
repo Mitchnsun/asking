@@ -1,5 +1,17 @@
 import { Db, MongoClient, MongoClientOptions } from 'mongodb'
 
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace NodeJS {
+    interface Global {
+      mongo: {
+        conn: any
+        promise: Promise<MongoClient | { client: MongoClient; db: Db }> | null
+      }
+    }
+  }
+}
+
 const MONGODB_URI = process.env.MONGODB_URI || ''
 const MONGODB_DB = process.env.MONGODB_DB || ''
 
