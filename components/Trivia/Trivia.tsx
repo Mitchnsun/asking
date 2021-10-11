@@ -47,7 +47,7 @@ const Trivia = ({ id, question, category }: Props): JSX.Element => {
   }
 
   return (
-    <main style={{ margin: '10vh 1rem' }}>
+    <main style={{ margin: isUpLGBreakpoint ? '10vh 1rem' : '1rem' }}>
       <Grid container spacing={2}>
         <Grid item xs={12} lg={5} style={{ margin: '0 auto' }}>
           <Card isMaxWidth>
