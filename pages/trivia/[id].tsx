@@ -1,11 +1,11 @@
 import Head from 'next/head'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
-import { CssBaseline, Grid, ThemeProvider } from '@mui/material'
+import { CssBaseline, ThemeProvider } from '@mui/material'
 import { Db, ObjectId } from 'mongodb'
 
 import theme from '../../utils/theme'
 import { withMongo } from '../../lib/mongodb'
-import Question from '../../components/Question'
+import Trivia from '../../components/Trivia'
 
 export default function Home({ id, question, category }: { id: string; question: string; category: string }): JSX.Element {
   return (
@@ -16,11 +16,7 @@ export default function Home({ id, question, category }: { id: string; question:
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <CssBaseline />
-      <Grid container component="main" alignItems="center" style={{ height: '75vh' }}>
-        <Grid item xs={12}>
-          <Question id={id} question={question} category={category} />
-        </Grid>
-      </Grid>
+      <Trivia id={id} question={question} category={category} />
     </ThemeProvider>
   )
 }
