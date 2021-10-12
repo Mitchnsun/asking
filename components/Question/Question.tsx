@@ -67,6 +67,7 @@ const Question = ({ question, category, status, nextURI, reset, onSubmit }: Prop
             <TextField
               {...field}
               label="Réponse"
+              inputProps={{ 'aria-label': 'Réponse' }}
               variant="outlined"
               fullWidth
               error={!!errors.answer}

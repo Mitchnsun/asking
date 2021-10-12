@@ -2,14 +2,11 @@ import React, { useRef, useState, useLayoutEffect } from 'react'
 import { Grid, Chip, Link, Stack, Typography } from '@mui/material'
 
 interface Props {
-  status?: string
-  success?: boolean
   answers?: string[]
   video?: string
   selection?: {
     answer: string
   }
-  next?: string
   wiki?: string
 }
 
@@ -31,7 +28,7 @@ const Answer = ({ answers, video, wiki, selection }: Props): JSX.Element => {
         </Typography>
         <Stack direction="row" spacing={1}>
           {(answers || []).map((answer) => (
-            <Chip key={answer} label={answer} variant="outlined" color="primary" />
+            <Chip key={answer} label={answer} variant="outlined" color="primary" aria-label={answer} role="listitem" />
           ))}
         </Stack>
       </Grid>
@@ -54,6 +51,7 @@ const Answer = ({ answers, video, wiki, selection }: Props): JSX.Element => {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             style={{ width: '100%' }}
+            role="application"
           ></iframe>
         ) : null}
       </Grid>

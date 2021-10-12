@@ -5,7 +5,7 @@ import { render, screen } from '@testing-library/react'
 import CategoryTag from './CategoryTag'
 import { TAG } from './CategoryTag.constants'
 
-describe('Atoms: CategoryTag', () => {
+describe('atoms/CategoryTag', () => {
   test('it should not display component if tag does not exist', () => {
     const { container } = render(<CategoryTag cat="Toto" />)
     expect(container.firstChild).toBeNull()

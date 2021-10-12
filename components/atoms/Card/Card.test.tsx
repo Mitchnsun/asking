@@ -4,7 +4,7 @@
 import { render, screen } from '@testing-library/react'
 import Card from './Card'
 
-describe('Atoms: Card', () => {
+describe('atoms/Card', () => {
   test('it should embed my element', () => {
     render(
       <Card isMaxWidth>
