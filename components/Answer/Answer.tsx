@@ -1,5 +1,5 @@
 import React, { useRef, useState, useLayoutEffect } from 'react'
-import { Grid, Chip, Link, Stack, Typography } from '@mui/material'
+import { Grid, Chip, Link, Typography } from '@mui/material'
 
 interface Props {
   answers?: string[]
@@ -26,11 +26,13 @@ const Answer = ({ answers, video, wiki, selection }: Props): JSX.Element => {
         <Typography variant="subtitle1" color="primary" gutterBottom>
           <b>Réponse(s) acceptée(s)</b>
         </Typography>
-        <Stack direction="row" spacing={1}>
+        <Grid container direction="row" spacing={1}>
           {(answers || []).map((answer) => (
-            <Chip key={answer} label={answer} variant="outlined" color="primary" aria-label={answer} role="listitem" />
+            <Grid item key={answer}>
+              <Chip label={answer} variant="outlined" color="primary" aria-label={answer} role="listitem" />
+            </Grid>
           ))}
-        </Stack>
+        </Grid>
       </Grid>
       <Grid item xs={12}>
         <Typography variant="subtitle1" color="primary" gutterBottom>
