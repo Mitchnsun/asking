@@ -2,25 +2,25 @@
 import { createMocks } from 'node-mocks-http'
 import handleAnswer from '../../pages/api/answer'
 
-const mockGetQ = jest.fn()
+const mockGetA = jest.fn()
 const mockRandQ = jest.fn()
 
 jest.mock('../../utils/mongo.utils', () => ({
   Questions: {
-    get: (id: string) => mockGetQ(id),
+    getAnswers: (id: string) => mockGetA(id),
     random: (size: number) => mockRandQ(size),
   },
 }))
 
 describe('/api/answer', () => {
   beforeEach(() => {
-    mockGetQ.mockClear()
+    mockGetA.mockClear()
     mockRandQ.mockClear()
   })
 
   describe('POST: submit an answer', () => {
     test('return 200 for success answer', async () => {
-      mockGetQ.mockResolvedValue({
+      mockGetA.mockResolvedValue({
         answers: ['Au revoir'],
         video: 'https://www.youtube.com/watch?v=yHsOeutCWU0',
         wiki: 'https://fr.wikipedia.org/wiki/Au_revoir_(citation)',
@@ -47,7 +47,7 @@ describe('/api/answer', () => {
     })
 
     test('return 200 for wrong answer', async () => {
-      mockGetQ.mockResolvedValue({
+      mockGetA.mockResolvedValue({
         answers: ['Au revoir'],
         video: 'https://www.youtube.com/watch?v=yHsOeutCWU0',
         wiki: 'https://fr.wikipedia.org/wiki/Au_revoir_(citation)',

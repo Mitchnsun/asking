@@ -34,7 +34,7 @@ const post = async (req: NextApiRequest, res: NextApiResponse<Answer | ErrorRes>
   const normalizeAnswer = utils.normalize(answer).toLowerCase()
 
   // Get data from question
-  const result = await Questions.get(id)
+  const result = await Questions.getAnswers(id)
 
   // Verification good or bad answer
   const { answers, video, wiki } = result || {}
