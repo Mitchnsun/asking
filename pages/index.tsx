@@ -1,9 +1,8 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { Button, CssBaseline, Grid } from '@mui/material'
-import type { Db } from 'mongodb'
 
-import { withMongo } from '../lib/mongodb'
+import { Questions } from '../utils/mongo.utils'
 
 export default function Home({ id }: { id: string }): JSX.Element {
   return (
@@ -28,11 +27,7 @@ export default function Home({ id }: { id: string }): JSX.Element {
 }
 
 export async function getServerSideProps(): Promise<{ props: { id: string } }> {
-  const result = await withMongo(async (db: Db) => {
-    const collection = db.collection('questions')
-    return await collection.aggregate([{ $sample: { size: 1 } }]).toArray()
-  })
-
+  const result = await Questions.random(1)
   const { _id } = (result || [])[0]
 
   return {

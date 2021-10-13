@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Db, ObjectId } from 'mongodb'
 
-import { withMongo } from '../../lib/mongodb'
 import * as utils from '../../utils/string.utils'
+import { Questions } from '../../utils/mongo.utils'
 const ANSWER_TOLERANCE = 0.75
 
 type Selection = {
@@ -21,15 +20,21 @@ type Answer = {
   success: boolean
 }
 
-const post = async (req: NextApiRequest, res: NextApiResponse<Answer>): Promise<void> => {
+type ErrorRes = {
+  code: string
+}
+
+const post = async (req: NextApiRequest, res: NextApiResponse<Answer | ErrorRes>): Promise<void> => {
   const { answer, id } = req.body
+
+  if (!answer || !id) {
+    return res.status(500).json({ code: 'server/missing-parameters' })
+  }
+
   const normalizeAnswer = utils.normalize(answer).toLowerCase()
 
   // Get data from question
-  const result = await withMongo(async (db: Db) => {
-    const collection = db.collection('questions')
-    return await collection.findOne({ _id: new ObjectId(id) }, { projection: { answers: 1, video: 1, wiki: 1 } })
-  })
+  const result = await Questions.get(id)
 
   // Verification good or bad answer
   const { answers, video, wiki } = result || {}
@@ -42,13 +47,10 @@ const post = async (req: NextApiRequest, res: NextApiResponse<Answer>): Promise<
   const selection = verification.reduce((prev: Selection, curr: Selection) => (prev.similar > curr.similar ? prev : curr))
 
   // Fetch next question
-  const next = await withMongo(async (db: Db) => {
-    const collection = db.collection('questions')
-    return await collection.aggregate([{ $sample: { size: 2 } }]).toArray()
-  })
+  const next = await Questions.random(2)
   const { _id } = (next?.filter((q) => q._id.toString() !== id) || [])[0]
 
-  res.status(200).json({
+  return res.status(200).json({
     success: selection.strict || selection.contain || selection.similar > ANSWER_TOLERANCE,
     selection,
     answers,
@@ -58,7 +60,7 @@ const post = async (req: NextApiRequest, res: NextApiResponse<Answer>): Promise<
   })
 }
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<Answer | { code: string }>): Promise<void> => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<Answer | ErrorRes>): Promise<void> => {
   switch (req.method) {
     case 'POST':
       return post(req, res)

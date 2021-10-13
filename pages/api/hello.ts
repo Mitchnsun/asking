@@ -2,9 +2,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
-  name: string
+  message: string
 }
 
 export default (req: NextApiRequest, res: NextApiResponse<Data>): void => {
-  res.status(200).json({ name: 'It works!' })
+  res.status(200).json({ message: 'It works!' })
 }
