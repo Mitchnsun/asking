@@ -6,7 +6,7 @@ import theme from '../../utils/theme'
 import { Questions } from '../../utils/mongo.utils'
 import Trivia from '../../components/Trivia'
 
-export default function Home({ id, question, category }: { id: string; question: string; category: string }): JSX.Element {
+export default function TriviaPage({ id, question, category }: { id: string; question: string; category: string }): JSX.Element {
   return (
     <ThemeProvider theme={theme}>
       <Head>

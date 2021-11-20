@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { Button, CssBaseline, Grid } from '@mui/material'
+import PersonIcon from '@mui/icons-material/Person'
+import GroupsIcon from '@mui/icons-material/Groups'
 
 import { Questions } from '../utils/mongo.utils'
 
@@ -13,11 +15,20 @@ export default function Home({ id }: { id: string }): JSX.Element {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <CssBaseline />
-      <Grid container component="main" justifyContent="center" alignItems="center" style={{ height: '75vh' }}>
-        <Grid item xs={10} sm={4}>
+      <Grid container spacing={3} component="main" justifyContent="center" alignItems="center" style={{ height: '75vh' }}>
+        <Grid item xs={10} sm={4} style={{ textAlign: 'center' }}>
+          <PersonIcon color="secondary" fontSize="large" />
           <Link href={`/trivia/${id}`} passHref>
             <Button variant="contained" color="secondary" size="large" fullWidth>
               Jouer
+            </Button>
+          </Link>
+        </Grid>
+        <Grid item xs={10} sm={4} style={{ textAlign: 'center' }}>
+          <GroupsIcon color="secondary" fontSize="large" />
+          <Link href={`/knowyourfriend`} passHref>
+            <Button variant="contained" color="secondary" size="large" fullWidth>
+              Découvre tes amis
             </Button>
           </Link>
         </Grid>
