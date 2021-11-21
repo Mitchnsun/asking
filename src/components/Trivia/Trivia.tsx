@@ -4,9 +4,9 @@ import { Grid } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
-import Card from '../atoms/Card'
-import Answer from '../Answer'
-import Question from '../Question'
+import Card from '@/atoms/Card'
+import Answer from '@/components/Answer'
+import Question from '@/components/Question'
 
 interface Props {
   id: string

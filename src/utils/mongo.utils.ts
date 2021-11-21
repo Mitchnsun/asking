@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Db, ObjectId } from 'mongodb'
-import { withTrivia } from '../lib/mongodb'
+import { withTrivia } from '@/lib/mongodb'
 
 export const Questions = {
   get: async (id: string) =>

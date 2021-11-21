@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import * as utils from '../../utils/string.utils'
-import { Questions } from '../../utils/mongo.utils'
+import * as utils from '@/utils/string.utils'
+import { Questions } from '@/utils/mongo.utils'
 const ANSWER_TOLERANCE = 0.75
 
 type Selection = {

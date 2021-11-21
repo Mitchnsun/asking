@@ -2,9 +2,9 @@ import Head from 'next/head'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 
-import theme from '../../utils/theme'
-import { Questions } from '../../utils/mongo.utils'
-import Trivia from '../../components/Trivia'
+import theme from '@/utils/theme'
+import { Questions } from '@/utils/mongo.utils'
+import Trivia from '@/components/Trivia'
 
 export default function TriviaPage({ id, question, category }: { id: string; question: string; category: string }): JSX.Element {
   return (

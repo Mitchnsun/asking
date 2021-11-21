@@ -6,7 +6,7 @@ import { Alert, Button, CircularProgress, Grid, TextField, Typography } from '@m
 import { makeStyles } from '@mui/styles'
 import Link from 'next/link'
 
-import CategoryTag from '../atoms/CategoryTag'
+import CategoryTag from '@/atoms/CategoryTag'
 
 interface Props {
   question: string

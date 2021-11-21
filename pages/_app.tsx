@@ -5,7 +5,7 @@ import '@fontsource/roboto/700.css'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from '@mui/material'
 
-import theme from '../utils/theme'
+import theme from '@/utils/theme'
 
 const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (

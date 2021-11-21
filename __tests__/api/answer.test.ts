@@ -1,11 +1,19 @@
 // 🚨 Remember to keep your `*.test.ts` files out of your `/pages` directory!
-import { createMocks } from 'node-mocks-http'
+import { createMocks as _createMocks } from 'node-mocks-http'
+import type { RequestOptions, ResponseOptions } from 'node-mocks-http'
 import handleAnswer from '../../pages/api/answer'
 
 const mockGetA = jest.fn()
 const mockRandQ = jest.fn()
 
-jest.mock('../../utils/mongo.utils', () => ({
+const createMocks = _createMocks as (
+  reqOptions?: RequestOptions,
+  resOptions?: ResponseOptions
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore: Fixing this: https://github.com/howardabrams/node-mocks-http/issues/245
+) => Mocks<NextApiRequest, NextApiResponse>
+
+jest.mock('@/utils/mongo.utils', () => ({
   Questions: {
     getAnswers: (id: string) => mockGetA(id),
     random: (size: number) => mockRandQ(size),
@@ -27,7 +35,7 @@ describe('/api/answer', () => {
       })
       mockRandQ.mockResolvedValue([{ _id: '1234' }, { _id: '5678' }])
 
-      const { req, res } = createMocks({ method: 'POST', body: { id: '1234', answer: 'aurevoir' } })
+      const { req, res } = createMocks({ method: 'POST', body: { id: '1234', answer: 'aurevoir' }, env: 'test' })
       await handleAnswer(req, res)
 
       expect(res._getStatusCode()).toBe(200)

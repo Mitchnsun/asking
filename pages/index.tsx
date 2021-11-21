@@ -4,7 +4,7 @@ import { Button, CssBaseline, Grid } from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person'
 import GroupsIcon from '@mui/icons-material/Groups'
 
-import { Questions } from '../utils/mongo.utils'
+import { Questions } from '@/utils/mongo.utils'
 
 export default function Home({ id }: { id: string }): JSX.Element {
   return (
