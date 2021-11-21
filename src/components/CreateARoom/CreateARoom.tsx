@@ -11,12 +11,10 @@ const CreateARoom = (): JSX.Element => {
   const create = (): Promise<void> => {
     setLoading(true)
     return axios
-      .post('/api/room', {})
-      .then((result) => {
-        setLoading(false)
-        setRoomId(result.data.roomId)
-      })
+      .post('/api/room', { game: 'knowyourfriends' })
+      .then((result) => setRoomId(result.data.roomId))
       .catch((error) => setError(error.message))
+      .finally(() => setLoading(false))
   }
 
   return (

@@ -1,8 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { adminDB } from '@/lib/firebase'
 
 const post = async (req: NextApiRequest, res: NextApiResponse<{ roomId: string }>): Promise<void> => {
+  const { game = '' } = req.body
+  const newRef = adminDB.ref('rooms').push({ game })
   return res.status(200).json({
-    roomId: 'AC76GDT',
+    roomId: newRef.key || '',
   })
 }
 

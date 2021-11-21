@@ -26,7 +26,7 @@ export default function Home({ id }: { id: string }): JSX.Element {
         </Grid>
         <Grid item xs={10} sm={4} style={{ textAlign: 'center' }}>
           <GroupsIcon color="secondary" fontSize="large" />
-          <Link href={`/knowyourfriend`} passHref>
+          <Link href={`/knowyourfriends`} passHref>
             <Button variant="contained" color="secondary" size="large" fullWidth>
               Découvre tes amis
             </Button>
