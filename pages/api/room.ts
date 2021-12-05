@@ -1,9 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { adminDB } from '@/lib/firebase'
 
-const post = async (req: NextApiRequest, res: NextApiResponse<{ roomId: string }>): Promise<void> => {
-  const { game = '' } = req.body
-  const newRef = adminDB.ref('rooms').push({ game })
+const post = async (req: NextApiRequest, res: NextApiResponse<{ roomId: string } | { code: string }>): Promise<void> => {
+  const { game, admin } = req.body
+
+  if (!game || !admin) {
+    res.status(500).json({ code: 'server/missing-parameters' })
+  }
+
+  const newRef = adminDB.ref('rooms').push({ game, admin, players: [admin] })
   return res.status(200).json({
     roomId: newRef.key || '',
   })

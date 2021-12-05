@@ -52,6 +52,9 @@ module.exports = {
           },
         ],
 
+        'no-empty-function': 'off',
+        '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions'] }],
+
         'prettier/prettier': ['error', {}, { usePrettierrc: true }],
       },
     },
