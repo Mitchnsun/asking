@@ -2,25 +2,17 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { adminDB } from '@/lib/firebase-admin'
 import { ErrorType } from '@/types/Error'
 
-const postHandler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<{ roomId: string | null; userId: string | null } | ErrorType>
-): Promise<void> => {
-  const { game, alias } = req.body
+const postHandler = async (req: NextApiRequest, res: NextApiResponse<{ playerId: string | null } | ErrorType>): Promise<void> => {
+  const { alias, roomId } = req.body
 
-  if (!game || !alias) {
+  if (!alias || !roomId) {
     return res.status(500).json({ code: 'server/missing-parameters' })
   }
 
-  const roomRef = adminDB.ref('rooms').push({ game })
+  const roomRef = adminDB.ref('rooms').child(roomId)
   const playerRef = roomRef.child('players').push({ alias })
-  roomRef.child('admin').set(playerRef.key)
-  roomRef.child('status').set('waiting')
 
-  return res.status(200).json({
-    roomId: roomRef.key || null,
-    userId: playerRef.key || null,
-  })
+  return res.status(200).json({ playerId: playerRef.key })
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<unknown>): Promise<void> => {

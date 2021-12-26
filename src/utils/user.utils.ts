@@ -1,7 +1,7 @@
-import type { User } from '@/context/user.context'
+import { User, INITIAL_USER } from '@/context/user.context'
 import Storage from '@/utils/storage.utils'
 
-const retrieve = (): User => Storage.local.get('user') || { alias: null, roomId: null, isAdmin: false }
+const retrieve = (): User => Storage.local.get('user') || INITIAL_USER
 
 const persist = (user: User): void => Storage.local.set('user', user)
 

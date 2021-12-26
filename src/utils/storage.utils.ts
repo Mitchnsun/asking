@@ -3,7 +3,7 @@
 const local = {
   get: (key: string): any | null => {
     try {
-      const value = localStorage.getItem(key)
+      const value = localStorage?.getItem(key)
       return value ? JSON.parse(value) : null
     } catch (e) {
       console.info('Error get key from local storage', e)
@@ -12,14 +12,14 @@ const local = {
   },
   set: (key: string, value: unknown): void => {
     try {
-      localStorage.setItem(key, JSON.stringify(value))
+      localStorage?.setItem(key, JSON.stringify(value))
     } catch (e) {
       console.info('Error set key to local storage', e)
     }
   },
   remove: (key: string): void => {
     try {
-      localStorage.removeItem(key)
+      localStorage?.removeItem(key)
     } catch (e) {
       console.info('Error removing key from local storage', e)
     }
@@ -29,7 +29,7 @@ const local = {
 const session = {
   get: (key: string): any | null => {
     try {
-      const value = sessionStorage.getItem(key)
+      const value = sessionStorage?.getItem(key)
       return value ? JSON.parse(value) : null
     } catch (e) {
       console.info('Error get key from session storage', e)
@@ -38,14 +38,14 @@ const session = {
   },
   set: (key: string, value: string): void => {
     try {
-      sessionStorage.setItem(key, JSON.stringify(value))
+      sessionStorage?.setItem(key, JSON.stringify(value))
     } catch (e) {
       console.info('Error set key to session storage', e)
     }
   },
   remove: (key: string): void => {
     try {
-      sessionStorage.removeItem(key)
+      sessionStorage?.removeItem(key)
     } catch (e) {
       console.info('Error removing key from session storage', e)
     }

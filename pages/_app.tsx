@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from '@mui/material'
 
@@ -8,21 +8,19 @@ import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 
 import theme from '@/utils/theme'
-import UserContext, { User } from '@/context/user.context'
+import UserContext, { User, INITIAL_USER } from '@/context/user.context'
 import UserUtils from '@/utils/user.utils'
 
 const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
-  const [user, setUser] = useState<User>(UserUtils.retrieve())
+  const [user, setUser] = useState<User>(INITIAL_USER)
 
-  const persistUser = (user: User): void => {
-    UserUtils.persist(user)
-    setUser(user)
-  }
+  useEffect(() => setUser(UserUtils.retrieve()), [])
+  useEffect(() => UserUtils.persist(user), [user])
 
   return (
     <React.StrictMode>
       <ThemeProvider theme={theme}>
-        <UserContext.Provider value={{ user, setUser: persistUser }}>
+        <UserContext.Provider value={{ user, setUser }}>
           <Component {...pageProps} />
         </UserContext.Provider>
       </ThemeProvider>

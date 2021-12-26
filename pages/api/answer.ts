@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import * as utils from '@/utils/string.utils'
 import { Questions } from '@/utils/mongo.utils'
+import { ErrorType } from '@/types/Error'
+
 const ANSWER_TOLERANCE = 0.75
 
 type Selection = {
@@ -20,11 +22,7 @@ type Answer = {
   success: boolean
 }
 
-type ErrorRes = {
-  code: string
-}
-
-const post = async (req: NextApiRequest, res: NextApiResponse<Answer | ErrorRes>): Promise<void> => {
+const post = async (req: NextApiRequest, res: NextApiResponse<Answer | ErrorType>): Promise<void> => {
   const { answer, id } = req.body
 
   if (!answer || !id) {
@@ -60,7 +58,7 @@ const post = async (req: NextApiRequest, res: NextApiResponse<Answer | ErrorRes>
   })
 }
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<Answer | ErrorRes>): Promise<void> => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<Answer | ErrorType>): Promise<void> => {
   switch (req.method) {
     case 'POST':
       return post(req, res)

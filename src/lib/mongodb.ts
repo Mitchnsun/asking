@@ -47,8 +47,3 @@ export async function withTrivia<T>(fn: (db: Db) => Promise<T>): Promise<T> {
   const conn = await connectToDatabase()
   return await fn(conn.db_trivia)
 }
-
-export async function withRooms<T>(fn: (db: Db) => Promise<T>): Promise<T> {
-  const conn = await connectToDatabase()
-  return await fn(conn.db_rooms)
-}
