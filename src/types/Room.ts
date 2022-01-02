@@ -1,6 +1,7 @@
 export interface RoomProps {
-  id: string
   admin: string
+  id: string
   game: string
   players: Record<string, { alias: string }>
+  status: string
 }

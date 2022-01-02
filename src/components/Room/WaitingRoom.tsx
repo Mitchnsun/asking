@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { useRouter } from 'next/router'
 import { Alert, Button, CircularProgress, Grid, Typography } from '@mui/material'
 import Card from '@/atoms/Card'
@@ -22,6 +22,9 @@ const WaitingRoom = ({ admin, players = {} }: RoomProps): JSX.Element => {
         setUser(INITIAL_USER)
       })
 
+  const startGame = (): Promise<void | AxiosResponse<{ status: string }>> =>
+    axios.patch(`/api/room/${query.id}`, { action: 'start' }).catch((error) => setError(error.message))
+
   return (
     <>
       <Grid item xs={12} lg={5} style={{ margin: '0 auto' }}>
@@ -37,7 +40,7 @@ const WaitingRoom = ({ admin, players = {} }: RoomProps): JSX.Element => {
                 </Alert>
                 <br />
                 <Typography paragraph>Dès que la liste des joueurs est complète, lancez la partie:</Typography>
-                <Button variant="contained" color="primary" size="large">
+                <Button variant="contained" color="primary" size="large" onClick={startGame}>
                   Lancer la partie
                 </Button>
               </>
@@ -55,6 +58,11 @@ const WaitingRoom = ({ admin, players = {} }: RoomProps): JSX.Element => {
             )}
           </>
         </Card>
+        {error && (
+          <Alert severity="error" style={{ marginTop: '1rem' }}>
+            {error}
+          </Alert>
+        )}
         <br />
         {!user.alias && (
           <Card>

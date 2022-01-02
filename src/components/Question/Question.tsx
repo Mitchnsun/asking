@@ -11,7 +11,7 @@ import CategoryTag from '@/atoms/CategoryTag'
 interface Props {
   question: string
   category: string
-  status?: string
+  status?: string | null
   nextURI: string | null
   reset: () => void
   onSubmit: ({ answer }: { answer: string }) => void

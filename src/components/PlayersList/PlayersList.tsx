@@ -14,10 +14,7 @@ const PlayersList = (): JSX.Element => {
 
   useEffect(() => {
     const playersRef = ref(db, `rooms/${query.id}/players`)
-    onValue(playersRef, (snapshot) => {
-      const data = snapshot.val()
-      setPlayers(data || {})
-    })
+    onValue(playersRef, (snapshot) => setPlayers(snapshot.val() || {}))
   }, [query.id])
 
   return (

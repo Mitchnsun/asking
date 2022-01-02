@@ -19,3 +19,11 @@ export const Questions = {
       return await collection.aggregate([{ $sample: { size } }]).toArray()
     }),
 }
+
+export const KnowYourFriend = {
+  random: async (size: number) =>
+    await withTrivia(async (db: Db) => {
+      const collection = db.collection('knowyourfriend')
+      return await collection.aggregate([{ $sample: { size } }]).toArray()
+    }),
+}

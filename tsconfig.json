@@ -19,6 +19,7 @@
       "@/components/*": ["src/components/*"],
       "@/context/*": ["src/context/*"],
       "@/lib/*": ["src/lib/*"],
+      "@/KYF/*": ["src/knowyourfriends/*"],
       "@/types/*": ["src/types/*"],
       "@/utils/*": ["src/utils/*"]
     }
