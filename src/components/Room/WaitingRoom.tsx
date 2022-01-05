@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { Alert, Button, CircularProgress, Grid, Typography } from '@mui/material'
 import Card from '@/atoms/Card'
 import { RoomProps } from '@/types/Room'
-import UserContext, { INITIAL_USER } from '@/context/user.context'
+import UserContext from '@/context/user.context'
 import AliasForm from '@/components/AliasForm'
 import PlayersList from '@/components/PlayersList'
 
@@ -17,10 +17,7 @@ const WaitingRoom = ({ admin, players = {} }: RoomProps): JSX.Element => {
     axios
       .post<{ playerId: string }>('/api/room/add-player', { alias, roomId: query.id })
       .then((result) => setUser({ ...user, alias, id: result.data.playerId, roomId: query.id as string }))
-      .catch((error) => {
-        setError(error.message)
-        setUser(INITIAL_USER)
-      })
+      .catch((error) => setError(error.message))
 
   const startGame = (): Promise<void | AxiosResponse<{ status: string }>> =>
     axios.patch(`/api/room/${query.id}`, { action: 'start' }).catch((error) => setError(error.message))

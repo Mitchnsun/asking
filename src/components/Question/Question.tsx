@@ -10,7 +10,7 @@ import CategoryTag from '@/atoms/CategoryTag'
 
 interface Props {
   question: string
-  category: string
+  category?: string
   status?: string | null
   nextURI: string | null
   reset: () => void

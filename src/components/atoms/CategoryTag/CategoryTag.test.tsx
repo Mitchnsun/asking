@@ -22,7 +22,11 @@ describe('atoms/CategoryTag', () => {
 
     rerender(<CategoryTag cat="DIV" />)
     expect(screen.getByText(TAG.DIV.label)).toBeInTheDocument()
-    expect(screen.getByTestId('MoodIcon')).toBeInTheDocument()
+    expect(screen.getByTestId('CelebrationIcon')).toBeInTheDocument()
+
+    rerender(<CategoryTag cat="GAS" />)
+    expect(screen.getByText(TAG.GAS.label)).toBeInTheDocument()
+    expect(screen.getByTestId('RestaurantIcon')).toBeInTheDocument()
 
     rerender(<CategoryTag cat="GEO" />)
     expect(screen.getByText(TAG.GEO.label)).toBeInTheDocument()
@@ -44,6 +48,10 @@ describe('atoms/CategoryTag', () => {
     expect(screen.getByText(TAG.MUS.label)).toBeInTheDocument()
     expect(screen.getByTestId('MusicNoteIcon')).toBeInTheDocument()
 
+    rerender(<CategoryTag cat="PER" />)
+    expect(screen.getByText(TAG.PER.label)).toBeInTheDocument()
+    expect(screen.getByTestId('MoodIcon')).toBeInTheDocument()
+
     rerender(<CategoryTag cat="SCI" />)
     expect(screen.getByText(TAG.SCI.label)).toBeInTheDocument()
     expect(screen.getByTestId('ScienceIcon')).toBeInTheDocument()
@@ -51,5 +59,9 @@ describe('atoms/CategoryTag', () => {
     rerender(<CategoryTag cat="SPO" />)
     expect(screen.getByText(TAG.SPO.label)).toBeInTheDocument()
     expect(screen.getByTestId('SportsSoccerIcon')).toBeInTheDocument()
+
+    rerender(<CategoryTag cat="TRA" />)
+    expect(screen.getByText(TAG.TRA.label)).toBeInTheDocument()
+    expect(screen.getByTestId('WorkIcon')).toBeInTheDocument()
   })
 })

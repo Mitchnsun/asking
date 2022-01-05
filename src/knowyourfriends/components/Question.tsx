@@ -8,13 +8,23 @@ import UserContext from '@/context/user.context'
 import { Grid, Typography, Table, TableContainer, TableBody, TableCell, TableRow } from '@mui/material'
 import CategoryTag from '@/atoms/CategoryTag'
 import Question from '@/components/Question'
+import { QuestionType } from '@/types/Question'
 
-const KYFQuestion = ({ players }: { players: Array<{ alias: string; answer?: string }> }): JSX.Element => {
+import { point, Player } from '../utils/score'
+
+const pointLabel = (point: number): string => {
+  if (point === 0) return 'Aucun point'
+  if (point === 1) return '1 point'
+  return `${point} points`
+}
+
+const KYFQuestion = ({ players }: { players: Player[] }): JSX.Element => {
   const { query } = useRouter()
   const { user } = useContext(UserContext)
-  const [question, setQuestion] = useState<any>({})
+  const [question, setQuestion] = useState<QuestionType>({} as QuestionType)
   const [status, setStatus] = useState<string | null>(null)
-  const isAllAnswered = Object.values(players).filter((player) => !player.answer).length === 0
+  const isAllAnswered = players.filter((player) => !player.answer).length === 0
+  const you = players.find((player) => player.id === user.id)
 
   useEffect(() => {
     const questionRef = ref(db, `rooms/${query.id}/question`)
@@ -51,12 +61,15 @@ const KYFQuestion = ({ players }: { players: Array<{ alias: string; answer?: str
             <TableContainer>
               <Table aria-label="Table des réponses">
                 <TableBody>
-                  {players.map(({ alias, answer }) => (
-                    <TableRow key={alias}>
-                      <TableCell component="th" scope="row">
-                        {alias}
-                      </TableCell>
+                  {players.map(({ id, alias, answer }) => (
+                    <TableRow key={alias} selected={user.id === id}>
+                      <TableCell scope="row">{alias}</TableCell>
                       <TableCell align="right">{answer}</TableCell>
+                      <TableCell align="right">
+                        {you?.id !== id
+                          ? pointLabel(point({ you, other: { id, alias, answer }, idToQuestion: question.player }))
+                          : ''}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
+import axios, { AxiosResponse } from 'axios'
 import { useRouter } from 'next/router'
 import { ref, onValue } from 'firebase/database'
 import { db } from '@/lib/firebase'
@@ -8,16 +9,25 @@ import { Alert, Button, Grid } from '@mui/material'
 import Card from '@/atoms/Card'
 import KYFQuestion from '@/KYF/components/Question'
 import AnsweringPlayers from '@/KYF/components/AnsweringPlayers'
+import { PlayerType } from '@/types/Room'
 
 const PlayingRoom = ({ admin }: { admin: string }): JSX.Element => {
   const { query } = useRouter()
   const { user } = useContext(UserContext)
-  const [players, setPlayers] = useState<Array<{ alias: string; answer?: string }>>([])
+  const [players, setPlayers] = useState<PlayerType[]>([])
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const playersRef = ref(db, `rooms/${query.id}/players`)
-    onValue(playersRef, (snapshot) => setPlayers(Object.values(snapshot.val() || {})))
+    onValue(playersRef, (snapshot) => {
+      const keys: string[] = Object.keys(snapshot.val() || {})
+      const values: PlayerType[] = Object.values(snapshot.val() || {})
+      setPlayers(values.map((player, index) => ({ ...player, id: keys[index] })))
+    })
   }, [query.id])
+
+  const nextQuestion = (): Promise<void | AxiosResponse<{ status: string }>> =>
+    axios.patch(`/api/room/${query.id}`, { action: 'next' }).catch((error) => setError(error.message))
 
   return (
     <>
@@ -32,10 +42,15 @@ const PlayingRoom = ({ admin }: { admin: string }): JSX.Element => {
                   Vous êtes l&apos;administrateur de cette partie
                 </Alert>
                 <br />
-                <Button variant="contained" color="primary" size="large">
+                <Button variant="contained" color="primary" size="large" onClick={nextQuestion}>
                   Question suivante
                 </Button>
               </>
+            )}
+            {error && (
+              <Alert severity="error" style={{ marginTop: '1rem' }}>
+                {error}
+              </Alert>
             )}
           </>
         </Card>
