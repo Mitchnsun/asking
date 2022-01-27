@@ -7,15 +7,14 @@ declare global {
     interface Global {
       mongo: {
         conn: any
-        promise: Promise<MongoClient | { client: MongoClient; db_trivia: Db; db_rooms: Db }> | null
+        promise: Promise<MongoClient | { client: MongoClient; db_trivia: Db }> | null
       }
     }
   }
 }
 
 const MONGODB_URI = process.env.MONGODB_URI || ''
-const MONGODB_DB_TRIVIA = process.env.MONGODB_DB_TRIVIA || ''
-const MONGODB_DB_ROOMS = process.env.MONGODB_DB_ROOMS || ''
+const MONGODB_DB = process.env.MONGODB_DB || ''
 
 let cached = global.mongo
 
@@ -23,7 +22,7 @@ if (!cached) {
   cached = global.mongo = { conn: null, promise: null }
 }
 
-const connectToDatabase = async (): Promise<{ client: MongoClient; db_trivia: Db; db_rooms: Db }> => {
+const connectToDatabase = async (): Promise<{ client: MongoClient; db_trivia: Db }> => {
   if (cached.conn) {
     return cached.conn
   }
@@ -34,8 +33,7 @@ const connectToDatabase = async (): Promise<{ client: MongoClient; db_trivia: Db
     cached.promise = MongoClient.connect(MONGODB_URI, opts).then((client) => {
       return {
         client,
-        db_trivia: client.db(MONGODB_DB_TRIVIA),
-        db_rooms: client.db(MONGODB_DB_ROOMS),
+        db_trivia: client.db(MONGODB_DB),
       }
     })
   }
