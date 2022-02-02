@@ -91,7 +91,7 @@ const patchHandler = async (req: NextApiRequest, res: NextApiResponse<{ status: 
       scores[id] = {
         id,
         alias: players[id].alias,
-        played: questionPlayerId.val() === id ? prevScores[id].played + 1 : prevScores[id].played,
+        played: questionPlayerId.val() === id ? (prevScores[id]?.played || 0) + 1 : prevScores[id]?.played || 0,
         board: scorePlayers({ idToQuestion: questionPlayerId.val(), playerId: id, players, prevScore: prevScores[id] }),
       }
     })
