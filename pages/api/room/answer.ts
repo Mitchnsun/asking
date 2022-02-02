@@ -18,7 +18,7 @@ const patchHandler = async (req: NextApiRequest, res: NextApiResponse<ErrorType>
     return res.status(404).json({ code: 'server/player-not-found' })
   }
 
-  adminDB.ref(`rooms/${roomId}/players`).child(playerId).update({ answer: answer })
+  await adminDB.ref(`rooms/${roomId}/players`).child(playerId).update({ answer: answer })
 
   return res.status(200).json({ code: 'success' })
 }

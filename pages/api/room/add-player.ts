@@ -10,7 +10,7 @@ const postHandler = async (req: NextApiRequest, res: NextApiResponse<{ playerId:
   }
 
   const roomRef = adminDB.ref('rooms').child(roomId)
-  const playerRef = roomRef.child('players').push({ alias })
+  const playerRef = await roomRef.child('players').push({ alias })
 
   return res.status(200).json({ playerId: playerRef.key })
 }

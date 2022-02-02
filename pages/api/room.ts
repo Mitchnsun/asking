@@ -12,10 +12,11 @@ const postHandler = async (
     return res.status(500).json({ code: 'server/missing-parameters' })
   }
 
-  const roomRef = adminDB.ref('rooms').push({ game })
-  const playerRef = roomRef.child('players').push({ alias })
-  roomRef.child('admin').set(playerRef.key)
-  roomRef.child('status').set('waiting')
+  const roomRef = await adminDB.ref('rooms').push({ game })
+  const playerRef = await roomRef.child('players').push({ alias })
+  await roomRef.child('admin').set(playerRef.key)
+  await roomRef.child('status').set('waiting')
+  await roomRef.child('createdAt').set(Date.now())
 
   return res.status(200).json({
     roomId: roomRef.key || null,

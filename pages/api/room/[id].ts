@@ -72,11 +72,11 @@ const patchHandler = async (req: NextApiRequest, res: NextApiResponse<{ status: 
   }
 
   if (action === 'start') {
-    adminDB
+    await adminDB
       .ref('rooms')
       .child(id as string)
       .update({ status: 'playing' })
-    adminDB
+    await adminDB
       .ref(`rooms/${id}`)
       .child('question')
       .set({ ...question, status: 'answering', alias: players[question.player].alias, id: question._id?.toString() })
@@ -95,9 +95,9 @@ const patchHandler = async (req: NextApiRequest, res: NextApiResponse<{ status: 
         board: scorePlayers({ idToQuestion: questionPlayerId.val(), playerId: id, players, prevScore: prevScores[id] }),
       }
     })
-    adminDB.ref(`rooms/${id}`).child('scores').set(scores)
-    adminDB.ref(`rooms/${id}`).child('players').set(cleanPlayers(players))
-    adminDB.ref(`rooms/${id}`).child('question').set(question)
+    await adminDB.ref(`rooms/${id}`).child('scores').set(scores)
+    await adminDB.ref(`rooms/${id}`).child('players').set(cleanPlayers(players))
+    await adminDB.ref(`rooms/${id}`).child('question').set(question)
     return res.status(200).json({ status: 'playing' })
   }
 
