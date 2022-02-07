@@ -12,7 +12,11 @@ describe('atoms/CategoryTag', () => {
   })
 
   test('it should display an icon and a label', () => {
-    const { rerender } = render(<CategoryTag cat="ART" />)
+    const { rerender } = render(<CategoryTag cat="AMI" />)
+    expect(screen.getByText(TAG.AMI.label)).toBeInTheDocument()
+    expect(screen.getByTestId('PeopleIcon')).toBeInTheDocument()
+
+    rerender(<CategoryTag cat="ART" />)
     expect(screen.getByText(TAG.ART.label)).toBeInTheDocument()
     expect(screen.getByTestId('CropOriginalIcon')).toBeInTheDocument()
 
@@ -35,6 +39,10 @@ describe('atoms/CategoryTag', () => {
     rerender(<CategoryTag cat="HIS" />)
     expect(screen.getByText(TAG.HIS.label)).toBeInTheDocument()
     expect(screen.getByTestId('AccountBalanceIcon')).toBeInTheDocument()
+
+    rerender(<CategoryTag cat="LIF" />)
+    expect(screen.getByText(TAG.LIF.label)).toBeInTheDocument()
+    expect(screen.getByTestId('AccountCircleIcon')).toBeInTheDocument()
 
     rerender(<CategoryTag cat="LIT" />)
     expect(screen.getByText(TAG.LIT.label)).toBeInTheDocument()
@@ -63,5 +71,9 @@ describe('atoms/CategoryTag', () => {
     rerender(<CategoryTag cat="TRA" />)
     expect(screen.getByText(TAG.TRA.label)).toBeInTheDocument()
     expect(screen.getByTestId('WorkIcon')).toBeInTheDocument()
+
+    rerender(<CategoryTag cat="VOY" />)
+    expect(screen.getByText(TAG.VOY.label)).toBeInTheDocument()
+    expect(screen.getByTestId('TravelExploreIcon')).toBeInTheDocument()
   })
 })

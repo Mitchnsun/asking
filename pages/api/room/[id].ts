@@ -3,6 +3,7 @@ import { ref, get, child } from 'firebase/database'
 import { adminDB } from '@/lib/firebase-admin'
 import { db } from '@/lib/firebase'
 import { KnowYourFriend } from '@/utils/mongo.utils'
+import { GetNextPlayerToPlay } from '@/utils/players.utils'
 import { ErrorType } from '@/types/Error'
 import { QuestionType } from '@/types/Question'
 import { PlayerType, ScoresType, ScoreType } from '@/types/Room'
@@ -66,12 +67,12 @@ const patchHandler = async (req: NextApiRequest, res: NextApiResponse<{ status: 
   if (game.val() === 'knowyourfriends') {
     const result = await KnowYourFriend.random(1)
     question = (result || [])[0] as QuestionType
-    question.player = Object.keys(players).sort(() => 0.5 - Math.random())[0]
-    question.alias = players[question.player].alias
     question.id = (question._id || '').toString()
   }
 
   if (action === 'start') {
+    question.player = Object.keys(players).sort(() => 0.5 - Math.random())[0]
+    question.alias = players[question.player].alias
     await adminDB
       .ref('rooms')
       .child(id as string)
@@ -95,6 +96,9 @@ const patchHandler = async (req: NextApiRequest, res: NextApiResponse<{ status: 
         board: scorePlayers({ idToQuestion: questionPlayerId.val(), playerId: id, players, prevScore: prevScores[id] }),
       }
     })
+    const playerId = GetNextPlayerToPlay(scores)
+    question.player = playerId
+    question.alias = players[playerId].alias
     await adminDB.ref(`rooms/${id}`).child('scores').set(scores)
     await adminDB.ref(`rooms/${id}`).child('players').set(cleanPlayers(players))
     await adminDB.ref(`rooms/${id}`).child('question').set(question)
