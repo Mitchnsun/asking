@@ -1,9 +1,12 @@
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import CelebrationIcon from '@mui/icons-material/Celebration'
+import CheckroomIcon from '@mui/icons-material/Checkroom'
+import CommuteIcon from '@mui/icons-material/Commute'
 import CropOriginalIcon from '@mui/icons-material/CropOriginal'
 import EmojiNatureIcon from '@mui/icons-material/EmojiNature'
 import ExploreIcon from '@mui/icons-material/Explore'
+import FavoriteIcon from '@mui/icons-material/Favorite'
 import LocalMoviesIcon from '@mui/icons-material/LocalMovies'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import MoodIcon from '@mui/icons-material/Mood'
@@ -12,6 +15,7 @@ import PeopleIcon from '@mui/icons-material/People'
 import RestaurantIcon from '@mui/icons-material/Restaurant'
 import ScienceIcon from '@mui/icons-material/Science'
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer'
+import TranslateIcon from '@mui/icons-material/Translate'
 import TravelExploreIcon from '@mui/icons-material/TravelExplore'
 import WorkIcon from '@mui/icons-material/Work'
 
@@ -27,6 +31,10 @@ export const TAG: Record<string, { label: string; icon: JSX.Element }> = {
   CIN: {
     label: 'Cinéma',
     icon: <LocalMoviesIcon />,
+  },
+  COM: {
+    label: 'Transport',
+    icon: <CommuteIcon />,
   },
   DIV: {
     label: 'Divertissement',
@@ -44,6 +52,10 @@ export const TAG: Record<string, { label: string; icon: JSX.Element }> = {
     label: 'Histoire',
     icon: <AccountBalanceIcon />,
   },
+  LAN: {
+    label: 'Langues étrangères',
+    icon: <TranslateIcon />,
+  },
   LIF: {
     label: 'Vie personnelle',
     icon: <AccountCircleIcon />,
@@ -52,9 +64,17 @@ export const TAG: Record<string, { label: string; icon: JSX.Element }> = {
     label: 'Littérature',
     icon: <MenuBookIcon />,
   },
+  LOV: {
+    label: 'Amour',
+    icon: <FavoriteIcon />,
+  },
   NAT: {
     label: 'Nature',
     icon: <EmojiNatureIcon />,
+  },
+  MOD: {
+    label: 'Mode',
+    icon: <CheckroomIcon />,
   },
   MUS: {
     label: 'Musique',
