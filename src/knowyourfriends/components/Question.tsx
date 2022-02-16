@@ -66,9 +66,7 @@ const KYFQuestion = ({ players }: { players: Player[] }): JSX.Element => {
                       <TableCell scope="row">{alias}</TableCell>
                       <TableCell align="right">{answer}</TableCell>
                       <TableCell align="right">
-                        {you?.id !== id
-                          ? pointLabel(point({ you, other: { id, alias, answer }, idToQuestion: question.player }))
-                          : ''}
+                        {you?.id !== id ? pointLabel(point({ question, you, other: { id, alias, answer } })) : ''}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -81,6 +79,8 @@ const KYFQuestion = ({ players }: { players: Player[] }): JSX.Element => {
         <Question
           question={question.question?.replace('${name}', question.alias)}
           category={question.category}
+          choices={question.choices}
+          type={question.type}
           status={status}
           nextURI={null}
           reset={() => {}}

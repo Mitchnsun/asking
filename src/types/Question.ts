@@ -8,5 +8,6 @@ export interface QuestionType {
   player: string
   question: string
   status: string
-  type: string
+  tolerance?: string
+  type: 'free' | 'multiple' | 'number'
 }

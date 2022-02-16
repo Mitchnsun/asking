@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form'
 import Link from 'next/link'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Alert, Button, CircularProgress, Grid, TextField, Typography } from '@mui/material'
+import { Alert, Button, CircularProgress, Grid, GridSize, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
 import CategoryTag from '@/atoms/CategoryTag'
@@ -11,8 +11,10 @@ import CategoryTag from '@/atoms/CategoryTag'
 interface Props {
   question: string
   category?: string
-  status?: string | null
   nextURI: string | null
+  status?: string | null
+  type?: 'free' | 'multiple' | 'number'
+  choices?: string[]
   reset: () => void
   onSubmit: ({ answer }: { answer: string }) => void
 }
@@ -27,18 +29,18 @@ const useStyles = makeStyles({
   },
 })
 
-const schema = yup.object({
-  answer: yup.string().required('Indiquer votre réponse'),
-})
+const schemaFree = yup.object({ answer: yup.string().required('Indiquer votre réponse') })
+const schemaNumber = yup.object({ answer: yup.number().required('Indiquer votre réponse') })
 
-const Question = ({ question, category, status, nextURI, reset, onSubmit }: Props): JSX.Element => {
+const Question = ({ question, category, choices = [], status, nextURI, type, reset, onSubmit }: Props): JSX.Element => {
   const classes = useStyles()
+  const schema = type === 'number' ? schemaNumber : schemaFree
   const {
     control,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<{ answer: string }>({ resolver: yupResolver(schema) })
+  } = useForm<{ answer: any }>({ resolver: yupResolver(schema) })
 
   return (
     <Grid
@@ -58,6 +60,25 @@ const Question = ({ question, category, status, nextURI, reset, onSubmit }: Prop
           {question}
         </Typography>
       </Grid>
+      {type === 'multiple' ? (
+        <Grid container item spacing={1} justifyContent="space-around">
+          {choices.map((choice) => (
+            <Grid item key={choice} xs={Math.trunc(12 / choices.length) as GridSize}>
+              <Button
+                fullWidth
+                onClick={() => {
+                  setValue('answer', choice)
+                  onSubmit({ answer: choice })
+                }}
+                variant="outlined"
+                style={{ textTransform: 'none' }}
+              >
+                {choice}
+              </Button>
+            </Grid>
+          ))}
+        </Grid>
+      ) : null}
       <Grid item>
         <Controller
           name="answer"
@@ -69,6 +90,7 @@ const Question = ({ question, category, status, nextURI, reset, onSubmit }: Prop
               label="Réponse"
               inputProps={{ 'aria-label': 'Réponse' }}
               variant="outlined"
+              type={type === 'number' ? 'number' : 'text'}
               fullWidth
               error={!!errors.answer}
               helperText={errors.answer?.message}

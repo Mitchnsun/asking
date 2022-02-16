@@ -1,4 +1,5 @@
 import * as utils from '@/utils/string.utils'
+import { QuestionType } from '@/types/Question'
 
 export interface Player {
   alias: string
@@ -8,26 +9,40 @@ export interface Player {
 
 const ANSWER_TOLERANCE = 0.75
 
-const compareAnswer = (answerA: string | undefined, answerB: string | undefined): boolean => {
+const compareAnswer = (answerA: string | undefined, answerB: string | undefined, isPlayer: boolean): boolean => {
   if (!answerA || !answerB) {
     return false
   }
 
-  const normalizeAnswerA = utils.normalize(answerA).toLowerCase()
-  const normalizeAnswerB = utils.normalize(answerB).toLowerCase()
+  const normalizeAnswerA = utils.normalize(answerA.trim()).toLowerCase()
+  const normalizeAnswerB = utils.normalize(answerB.trim()).toLowerCase()
   const verification = {
     strict: normalizeAnswerA === normalizeAnswerB,
-    contain: normalizeAnswerA.includes(normalizeAnswerB) || normalizeAnswerB.includes(normalizeAnswerA),
+    contains: isPlayer ? normalizeAnswerA.includes(normalizeAnswerB) : false,
     similar: utils.similarity(normalizeAnswerA, normalizeAnswerB),
   }
 
-  return verification.strict || verification.contain || verification.similar > ANSWER_TOLERANCE
+  return verification.strict || verification.contains || verification.similar > ANSWER_TOLERANCE
 }
 
-export const point = ({ you, other, idToQuestion }: { you?: Player; other: Player; idToQuestion: string }): number => {
-  if (other.id === idToQuestion) {
-    return compareAnswer(you?.answer, other.answer) ? 2 : 0
+const compareNumberAnswer = (answerA: number, answerB: number, tolerance: string | undefined): boolean => {
+  const formatTolerance = Number(tolerance)
+  if (!isNaN(formatTolerance)) {
+    return Math.abs(answerA - answerB) <= formatTolerance
   }
 
-  return compareAnswer(you?.answer, other.answer) ? 1 : 0
+  return answerA === answerB
+}
+
+export const point = ({ question, you, other }: { question: QuestionType; you: Player | undefined; other: Player }): number => {
+  const result =
+    question.type === 'number'
+      ? compareNumberAnswer(Number(you?.answer), Number(other.answer), question.tolerance)
+      : compareAnswer(you?.answer?.toString(), other.answer?.toString(), other.id === question.player)
+
+  if (other.id === question.player) {
+    return result ? 2 : 0
+  }
+
+  return result ? 1 : 0
 }

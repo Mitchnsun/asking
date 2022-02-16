@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-export const INITIAL_USER = { id: null, alias: null, roomId: null, isAdmin: false }
+export const INITIAL_USER = { id: null, alias: null, roomId: null }
 
 const initialUser = {
   user: INITIAL_USER,
@@ -11,7 +11,6 @@ export interface User {
   id: string | null
   alias: string | null
   roomId: string | null
-  isAdmin: boolean
 }
 
 interface UserContextProps {

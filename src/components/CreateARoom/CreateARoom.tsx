@@ -18,7 +18,7 @@ const CreateARoom = (): JSX.Element => {
       .post('/api/room/', { game: 'knowyourfriends', alias: user.alias })
       .then((result) => {
         setSuccess('La partie a été créée!')
-        setUser({ ...user, id: result.data.userId, roomId: result.data.roomId, isAdmin: true })
+        setUser({ ...user, id: result.data.userId, roomId: result.data.roomId })
         router.push(`/room/${result.data.roomId}`)
       })
       .catch((error) => setError(error.message))

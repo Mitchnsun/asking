@@ -61,7 +61,7 @@ const WaitingRoom = ({ admin, players = {} }: RoomProps): JSX.Element => {
           </Alert>
         )}
         <br />
-        {!user.alias && (
+        {user.roomId !== query.id && (
           <Card>
             <>
               <AliasForm onCreate={(alias) => addPlayer(alias)} />

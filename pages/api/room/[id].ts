@@ -20,12 +20,12 @@ const cleanPlayers = (players: Record<string, PlayerType>): Record<string, Playe
 }
 
 const scorePlayers = ({
-  idToQuestion,
+  question,
   playerId,
   players,
   prevScore,
 }: {
-  idToQuestion: string
+  question: QuestionType
   playerId: string
   players: Record<string, PlayerType>
   prevScore: ScoresType
@@ -38,7 +38,7 @@ const scorePlayers = ({
         alias: players[id].alias,
         score:
           (prevScore?.board[id].score || 0) +
-          point({ you: { ...players[playerId], id: playerId }, other: { ...players[id], id }, idToQuestion }),
+          point({ question, you: { ...players[playerId], id: playerId }, other: { ...players[id], id } }),
       }
     }
   }, {})
@@ -85,15 +85,16 @@ const patchHandler = async (req: NextApiRequest, res: NextApiResponse<{ status: 
   }
 
   if (action === 'next') {
-    const questionPlayerId = await get(child(roomRef, 'question/player'))
+    const questionRef = await get(child(roomRef, 'question'))
+    const questionPlayerId = questionRef.val().player
     const prevScores = (await get(child(roomRef, 'scores'))).val() || {}
     const scores: Record<string, ScoresType> = {}
     Object.keys(players).forEach((id) => {
       scores[id] = {
         id,
         alias: players[id].alias,
-        played: questionPlayerId.val() === id ? (prevScores[id]?.played || 0) + 1 : prevScores[id]?.played || 0,
-        board: scorePlayers({ idToQuestion: questionPlayerId.val(), playerId: id, players, prevScore: prevScores[id] }),
+        played: questionPlayerId === id ? (prevScores[id]?.played || 0) + 1 : prevScores[id]?.played || 0,
+        board: scorePlayers({ question: questionRef.val(), playerId: id, players, prevScore: prevScores[id] }),
       }
     })
     const playerId = GetNextPlayerToPlay(scores)
