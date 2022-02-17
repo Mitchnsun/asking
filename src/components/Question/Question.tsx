@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form'
 import Link from 'next/link'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Alert, Button, CircularProgress, Grid, GridSize, TextField, Typography } from '@mui/material'
+import { Alert, Button, CircularProgress, Grid, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 
 import CategoryTag from '@/atoms/CategoryTag'
@@ -62,21 +62,23 @@ const Question = ({ question, category, choices = [], status, nextURI, type, res
       </Grid>
       {type === 'multiple' ? (
         <Grid container item spacing={1} justifyContent="space-around">
-          {choices.map((choice) => (
-            <Grid item key={choice} xs={Math.trunc(12 / choices.length) as GridSize}>
-              <Button
-                fullWidth
-                onClick={() => {
-                  setValue('answer', choice)
-                  onSubmit({ answer: choice })
-                }}
-                variant="outlined"
-                style={{ textTransform: 'none' }}
-              >
-                {choice}
-              </Button>
-            </Grid>
-          ))}
+          {choices
+            .sort(() => 0.5 - Math.random())
+            .map((choice) => (
+              <Grid item key={choice} xs={6} alignItems="center">
+                <Button
+                  fullWidth
+                  onClick={() => {
+                    setValue('answer', choice)
+                    onSubmit({ answer: choice })
+                  }}
+                  variant="outlined"
+                  style={{ textTransform: 'none' }}
+                >
+                  {choice}
+                </Button>
+              </Grid>
+            ))}
         </Grid>
       ) : null}
       <Grid item>

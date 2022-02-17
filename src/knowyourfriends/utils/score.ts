@@ -7,7 +7,7 @@ export interface Player {
   id?: string
 }
 
-const ANSWER_TOLERANCE = 0.75
+const ANSWER_TOLERANCE = 0.7
 
 const compareAnswer = (answerA: string | undefined, answerB: string | undefined, isPlayer: boolean): boolean => {
   if (!answerA || !answerB) {
