@@ -8,7 +8,7 @@ module.exports = {
   },
   parserOptions: { ecmaVersion: 8, sourceType: 'module' }, // to enable features such as async/await
   ignorePatterns: ['node_modules/*', '.next/*', '.out/*', '!.prettierrc.js'], // We don't want to lint generated files nor node_modules, but we want to lint .prettierrc.js (ignored by default by eslint)
-  extends: ['eslint:recommended'],
+  extends: ['eslint:recommended', 'next'],
   plugins: ['mui-unused-classes'],
   overrides: [
     // This configuration will apply only to TypeScript files
@@ -24,11 +24,11 @@ module.exports = {
       extends: [
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended', // TypeScript rules
-        'plugin:react/recommended', // React rules
         'plugin:react-hooks/recommended', // React hooks rules
         'plugin:jsx-a11y/recommended', // Accessibility rules
         'plugin:prettier/recommended',
         'plugin:cypress/recommended',
+        'plugin:@next/next/recommended',
       ],
       rules: {
         // We will use TypeScript's types for component props instead
@@ -51,6 +51,9 @@ module.exports = {
             allowConciseArrowFunctionExpressionsStartingWithVoid: true,
           },
         ],
+
+        'no-empty-function': 'off',
+        '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions'] }],
 
         'prettier/prettier': ['error', {}, { usePrettierrc: true }],
       },

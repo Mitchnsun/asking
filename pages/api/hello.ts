@@ -5,6 +5,8 @@ type Data = {
   message: string
 }
 
-export default (req: NextApiRequest, res: NextApiResponse<Data>): void => {
+const handler = (req: NextApiRequest, res: NextApiResponse<Data>): void => {
   res.status(200).json({ message: 'It works!' })
 }
+
+export default handler
