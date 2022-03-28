@@ -7,6 +7,7 @@ import { Alert, Button, CircularProgress, Grid, TextField, Typography } from '@m
 import { makeStyles } from '@mui/styles'
 
 import CategoryTag from '@/atoms/CategoryTag'
+import Choices from './Choices'
 
 interface Props {
   question: string
@@ -61,25 +62,13 @@ const Question = ({ question, category, choices = [], status, nextURI, type, res
         </Typography>
       </Grid>
       {type === 'multiple' ? (
-        <Grid container item spacing={1} justifyContent="space-around">
-          {choices
-            .sort(() => 0.5 - Math.random())
-            .map((choice) => (
-              <Grid item key={choice} xs={6} alignItems="center">
-                <Button
-                  fullWidth
-                  onClick={() => {
-                    setValue('answer', choice)
-                    onSubmit({ answer: choice })
-                  }}
-                  variant="outlined"
-                  style={{ textTransform: 'none' }}
-                >
-                  {choice}
-                </Button>
-              </Grid>
-            ))}
-        </Grid>
+        <Choices
+          choices={choices}
+          onClick={(choice) => {
+            setValue('answer', choice)
+            onSubmit({ answer: choice })
+          }}
+        />
       ) : null}
       <Grid item>
         <Controller

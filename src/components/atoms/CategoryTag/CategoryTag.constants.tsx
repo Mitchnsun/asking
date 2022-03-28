@@ -8,6 +8,7 @@ import EmojiNatureIcon from '@mui/icons-material/EmojiNature'
 import ExploreIcon from '@mui/icons-material/Explore'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import LocalMoviesIcon from '@mui/icons-material/LocalMovies'
+import NewspaperIcon from '@mui/icons-material/Newspaper'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import MoodIcon from '@mui/icons-material/Mood'
 import MusicNoteIcon from '@mui/icons-material/MusicNote'
@@ -20,6 +21,10 @@ import TravelExploreIcon from '@mui/icons-material/TravelExplore'
 import WorkIcon from '@mui/icons-material/Work'
 
 export const TAG: Record<string, { label: string; icon: JSX.Element }> = {
+  ACT: {
+    label: 'Actualité',
+    icon: <NewspaperIcon />,
+  },
   AMI: {
     label: 'Amitié',
     icon: <PeopleIcon />,
