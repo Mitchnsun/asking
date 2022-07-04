@@ -5,7 +5,8 @@ import { ref, get } from 'firebase/database'
 import { CssBaseline } from '@mui/material'
 import { db } from '@/lib/firebase'
 import { RoomProps } from '@/types/Room'
-import { Room, NoRoom } from '@/components/Room'
+import RoomDispatch from '@/room/Room.dispatch'
+import NoRoom from '@/room/Room.404'
 
 const RoomPage = ({ room }: { room: RoomProps | null }): JSX.Element => (
   <>
@@ -15,7 +16,7 @@ const RoomPage = ({ room }: { room: RoomProps | null }): JSX.Element => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <CssBaseline />
-    {room ? <Room {...room} /> : <NoRoom />}
+    {room ? <RoomDispatch {...room} /> : <NoRoom />}
   </>
 )
 

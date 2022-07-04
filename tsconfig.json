@@ -18,8 +18,10 @@
       "@/atoms/*": ["src/components/atoms/*"],
       "@/components/*": ["src/components/*"],
       "@/context/*": ["src/context/*"],
-      "@/lib/*": ["src/lib/*"],
       "@/KYF/*": ["src/knowyourfriends/*"],
+      "@/lib/*": ["src/lib/*"],
+      "@/room/*": ["src/room/*"],
+      "@/trivia/*": ["src/trivia/*"],
       "@/types/*": ["src/types/*"],
       "@/utils/*": ["src/utils/*"]
     }

@@ -5,7 +5,7 @@ import { Alert, Button, CircularProgress, Grid, Typography } from '@mui/material
 import Card from '@/atoms/Card'
 import { RoomProps } from '@/types/Room'
 import UserContext from '@/context/user.context'
-import AliasForm from '@/components/AliasForm'
+import AliasForm from '@/KYF/components/AliasForm'
 import PlayersList from '@/components/PlayersList'
 
 const WaitingRoom = ({ admin, players = {} }: RoomProps): JSX.Element => {

@@ -3,8 +3,9 @@ import Link from 'next/link'
 import { Alert, Button, Grid } from '@mui/material'
 import GroupIcon from '@mui/icons-material/Group'
 import Card from '@/atoms/Card'
-import CreateARoom from '@/components/CreateARoom'
-import AliasForm from '@/components/AliasForm'
+
+import CreateARoom from './components/CreateARoom'
+import AliasForm from './components/AliasForm'
 import UserContext from '@/context/user.context'
 
 const KnowYourFriends = (): JSX.Element => {

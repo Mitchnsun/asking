@@ -6,10 +6,20 @@ import { Grid } from '@mui/material'
 import { ref, onValue } from 'firebase/database'
 import { db } from '@/lib/firebase'
 import { RoomProps } from '@/types/Room'
-import WaitingRoom from './WaitingRoom'
-import PlayingRoom from './PlayingRoom'
+import KYFRoom from '@/KYF/KnowYourFriends.room'
+import NoRoom from './Room.404'
+import WaitingRoom from './Room.waiting'
 
-const Room = (props: RoomProps): JSX.Element => {
+const dispatch = (props: RoomProps): JSX.Element => {
+  switch (props.game) {
+    case 'knowyourfriends':
+      return <KYFRoom admin={props.admin} />
+    default:
+      return <NoRoom />
+  }
+}
+
+const RoomDispatch = (props: RoomProps): JSX.Element => {
   const { query } = useRouter()
   const theme = useTheme()
   const isUpLGBreakpoint = useMediaQuery(theme.breakpoints.up('lg'))
@@ -24,10 +34,10 @@ const Room = (props: RoomProps): JSX.Element => {
     <main style={{ margin: isUpLGBreakpoint ? '10vh 1rem' : '1rem' }}>
       <Grid container spacing={2}>
         {status === 'waiting' && <WaitingRoom {...props} />}
-        {status === 'playing' && <PlayingRoom admin={props.admin} />}
+        {status === 'playing' && dispatch(props)}
       </Grid>
     </main>
   )
 }
 
-export default Room
+export default RoomDispatch
