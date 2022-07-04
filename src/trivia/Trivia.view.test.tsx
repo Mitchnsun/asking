@@ -3,7 +3,7 @@
  */
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import Trivia from './Trivia'
+import Trivia from './Trivia.view'
 
 const props = {
   id: '1234',
@@ -23,7 +23,7 @@ jest.mock('next/link', () => {
   }
 })
 
-describe('components/Trivia', () => {
+describe('Trivia.view', () => {
   beforeEach(() => {
     mockAxios.mockClear()
   })

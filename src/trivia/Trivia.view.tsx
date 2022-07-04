@@ -5,8 +5,8 @@ import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 import Card from '@/atoms/Card'
-import Answer from '@/components/Answer'
 import Question from '@/components/Question'
+import Answer from './components/Answer'
 
 interface Props {
   id: string

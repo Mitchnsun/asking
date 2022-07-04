@@ -4,7 +4,7 @@
 import { render, screen } from '@testing-library/react'
 import Answer from './Answer'
 
-describe('components/Answer', () => {
+describe('Trivia/components: Answer', () => {
   test('it should display the answers and the details', () => {
     render(
       <Answer

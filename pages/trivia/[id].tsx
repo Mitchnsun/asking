@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { CssBaseline } from '@mui/material'
 
 import { Questions } from '@/utils/mongo.utils'
-import Trivia from '@/components/Trivia'
+import Trivia from '@/trivia/Trivia.view'
 
 export default function TriviaPage({ id, question, category }: { id: string; question: string; category: string }): JSX.Element {
   return (

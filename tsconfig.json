@@ -20,6 +20,7 @@
       "@/context/*": ["src/context/*"],
       "@/lib/*": ["src/lib/*"],
       "@/KYF/*": ["src/knowyourfriends/*"],
+      "@/trivia/*": ["src/trivia/*"],
       "@/types/*": ["src/types/*"],
       "@/utils/*": ["src/utils/*"]
     }
