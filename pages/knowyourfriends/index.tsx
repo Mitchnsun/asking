@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { CssBaseline } from '@mui/material'
-import KnowYourFriends from '@/components/KnowYourFriends'
+import KnowYourFriends from '@/KYF/KnowYourFriends.view'
 
 const KnowYourFriendsPage = (): JSX.Element => {
   return (
