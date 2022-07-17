@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Question from './Question'
 
@@ -39,14 +39,25 @@ describe('components/Question', () => {
     }
     render(<Question {...props} />)
 
-    userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
-    expect(props.onSubmit).not.toHaveBeenCalled()
-    expect(await screen.findByText('Indiquer votre réponse')).toBeInTheDocument()
+    act(() => {
+      userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
+    })
+    await waitFor(() => {
+      expect(props.onSubmit).not.toHaveBeenCalled()
+      expect(screen.getByText('Indiquer votre réponse')).toBeInTheDocument()
+    })
 
-    userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
-    expect(await screen.findByText('Indiquer votre réponse')).not.toBeInTheDocument()
+    act(() => {
+      userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
+    })
+    await waitFor(() => {
+      expect(screen.queryByText('Indiquer votre réponse')).toBeNull()
+      expect(screen.getByRole('textbox', { name: 'Réponse' })).toHaveValue('Charlie')
+    })
 
-    userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
+    act(() => {
+      userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
+    })
     await waitFor(() => {
       expect(props.onSubmit).toHaveBeenCalledWith({ answer: 'Charlie' }, expect.anything())
     })
@@ -61,8 +72,16 @@ describe('components/Question', () => {
       onSubmit: jest.fn(),
     }
     const { rerender } = render(<Question {...props} />)
-    userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
-    userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
+    act(() => {
+      userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
+    })
+    await waitFor(() => {
+      expect(screen.getByRole('textbox', { name: 'Réponse' })).toHaveValue('Charlie')
+    })
+
+    act(() => {
+      userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
+    })
     await waitFor(() => {
       expect(props.onSubmit).toHaveBeenCalledWith({ answer: 'Charlie' }, expect.anything())
     })

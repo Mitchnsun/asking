@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Trivia from './Trivia.view'
 
@@ -46,9 +46,16 @@ describe('Trivia.view', () => {
     expect(screen.queryByRole('application')).toBeNull()
     expect(screen.queryByRole('listItem')).toBeNull()
 
-    userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
-    userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
+    act(() => {
+      userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
+    })
+    await waitFor(() => {
+      expect(screen.getByRole('textbox', { name: 'Réponse' })).toHaveValue('Charlie')
+    })
 
+    act(() => {
+      userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
+    })
     await waitFor(() => {
       expect(mockAxios).toHaveBeenCalledWith('/api/answer', { answer: 'Charlie', id: props.id })
     })
@@ -70,9 +77,16 @@ describe('Trivia.view', () => {
     mockAxios.mockRejectedValue({})
     render(<Trivia {...props} />)
 
-    userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
-    userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
+    act(() => {
+      userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
+    })
+    await waitFor(() => {
+      expect(screen.getByRole('textbox', { name: 'Réponse' })).toHaveValue('Charlie')
+    })
 
+    act(() => {
+      userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
+    })
     await waitFor(() => {
       expect(mockAxios).toHaveBeenCalledWith('/api/answer', { answer: 'Charlie', id: props.id })
     })
@@ -94,15 +108,26 @@ describe('Trivia.view', () => {
     })
     render(<Trivia {...props} />)
 
-    userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
-    userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
+    act(() => {
+      userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
+    })
+    await waitFor(() => {
+      expect(screen.getByRole('textbox', { name: 'Réponse' })).toHaveValue('Charlie')
+    })
 
+    act(() => {
+      userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
+    })
     await waitFor(() => {
       expect(mockAxios).toHaveBeenCalledWith('/api/answer', { answer: 'Charlie', id: props.id })
       expect(screen.getByRole('application')).toBeInTheDocument()
     })
 
-    userEvent.click(screen.getByRole('button', { name: 'Suite' }))
-    expect(await screen.queryByRole('application')).toBeNull()
+    act(() => {
+      userEvent.click(screen.getByRole('button', { name: 'Suite' }))
+    })
+    await waitFor(() => {
+      expect(screen.queryByRole('application')).toBeNull()
+    })
   })
 })

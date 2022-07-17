@@ -1,10 +1,9 @@
-import React from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import React, { ReactNode } from 'react'
 import Link from 'next/link'
-import * as yup from 'yup'
+import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 import { Alert, Button, CircularProgress, Grid, TextField, Typography } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 
 import CategoryTag from '@/atoms/CategoryTag'
 import Choices from './Choices'
@@ -20,21 +19,10 @@ interface Props {
   onSubmit: ({ answer }: { answer: string }) => void
 }
 
-const useStyles = makeStyles({
-  container: {
-    justifyContent: 'space-around',
-  },
-  video: {
-    position: 'relative',
-    width: '100%',
-  },
-})
-
 const schemaFree = yup.object({ answer: yup.string().required('Indiquer votre réponse') })
 const schemaNumber = yup.object({ answer: yup.number().required('Indiquer votre réponse') })
 
 const Question = ({ question, category, choices = [], status, nextURI, type, reset, onSubmit }: Props): JSX.Element => {
-  const classes = useStyles()
   const schema = type === 'number' ? schemaNumber : schemaFree
   const {
     control,
@@ -45,11 +33,11 @@ const Question = ({ question, category, choices = [], status, nextURI, type, res
 
   return (
     <Grid
+      sx={{ justifyContent: 'space-around' }}
       container
       component="form"
       spacing={2}
       direction="column"
-      className={classes.container}
       onSubmit={handleSubmit(onSubmit)}
       autoComplete="off"
     >
@@ -84,7 +72,7 @@ const Question = ({ question, category, choices = [], status, nextURI, type, res
               type={type === 'number' ? 'number' : 'text'}
               fullWidth
               error={!!errors.answer}
-              helperText={errors.answer?.message}
+              helperText={errors.answer?.message as ReactNode}
             />
           )}
         />
