@@ -24,6 +24,9 @@ jest.mock('next/link', () => {
 })
 
 describe('Trivia.view', () => {
+  beforeAll(() => {
+    userEvent.setup()
+  })
   beforeEach(() => {
     mockAxios.mockClear()
   })
@@ -60,7 +63,7 @@ describe('Trivia.view', () => {
       expect(mockAxios).toHaveBeenCalledWith('/api/answer', { answer: 'Charlie', id: props.id })
     })
 
-    expect(screen.getByRole('listitem', { name: 'Answer1' })).toBeInTheDocument()
+    expect(await screen.findByRole('listitem', { name: 'Answer1' })).toBeInTheDocument()
     expect(screen.getByRole('listitem', { name: 'Answer2' })).toBeInTheDocument()
     expect(screen.getByRole('listitem', { name: 'Answer3' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Pour en apprendre plus, lire cet article' })).toHaveProperty(

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Db, MongoClient, MongoClientOptions } from 'mongodb'
 
@@ -16,9 +17,11 @@ declare global {
 const MONGODB_URI = process.env.MONGODB_URI || ''
 const MONGODB_DB = process.env.MONGODB_DB || ''
 
+//@ts-ignore
 let cached = global.mongo
 
 if (!cached) {
+  //@ts-ignore
   cached = global.mongo = { conn: null, promise: null }
 }
 

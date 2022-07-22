@@ -12,6 +12,10 @@ jest.mock('next/link', () => {
 })
 
 describe('components/Question', () => {
+  beforeAll(() => {
+    userEvent.setup()
+  })
+
   test('it should render the question with textbox', () => {
     render(
       <Question
@@ -38,6 +42,9 @@ describe('components/Question', () => {
       onSubmit: jest.fn(),
     }
     render(<Question {...props} />)
+    await waitFor(() => {
+      expect(screen.getByText(props.question)).toBeInTheDocument()
+    })
 
     act(() => {
       userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
@@ -89,7 +96,9 @@ describe('components/Question', () => {
     rerender(<Question {...props} nextURI="/trivia/1234" />)
     expect(screen.queryByRole('button', { name: 'Répondre' })).toBeNull()
 
-    userEvent.click(screen.getByRole('button', { name: 'Suite' }))
+    act(() => {
+      userEvent.click(screen.getByRole('button', { name: 'Suite' }))
+    })
     await waitFor(() => {
       expect(props.reset).toHaveBeenCalled()
     })
