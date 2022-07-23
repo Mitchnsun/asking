@@ -35,8 +35,8 @@ const post = async (req: NextApiRequest, res: NextApiResponse<Answer | ErrorType
   const result = await Questions.getAnswers(id)
 
   // Verification good or bad answer
-  const { answers, video, wiki } = result || {}
-  const verification = (answers || []).map((item: string) => ({
+  const { answers = [], video, wiki } = result || {}
+  const verification = answers.map((item: string) => ({
     answer: item,
     strict: normalizeAnswer === utils.normalize(item).toLowerCase(),
     contain: normalizeAnswer.includes(utils.normalize(item).toLowerCase()),

@@ -10,7 +10,7 @@ export const Questions = {
     }),
   getAnswers: async (id: string) =>
     await withTrivia(async (db: Db) => {
-      const collection = db.collection('questions')
+      const collection = db.collection<{ answers: string[]; video?: string; wiki?: string }>('questions')
       return await collection.findOne({ _id: new ObjectId(id) }, { projection: { answers: 1, video: 1, wiki: 1 } })
     }),
   random: async (size: number) =>
