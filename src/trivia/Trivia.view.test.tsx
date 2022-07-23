@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Trivia from './Trivia.view'
 
@@ -24,14 +24,12 @@ jest.mock('next/link', () => {
 })
 
 describe('Trivia.view', () => {
-  beforeAll(() => {
-    userEvent.setup()
-  })
   beforeEach(() => {
     mockAxios.mockClear()
   })
 
   test('it should submit the answer', async () => {
+    const user = userEvent.setup()
     mockAxios.mockResolvedValue({
       data: {
         success: true,
@@ -49,16 +47,12 @@ describe('Trivia.view', () => {
     expect(screen.queryByRole('application')).toBeNull()
     expect(screen.queryByRole('listItem')).toBeNull()
 
-    act(() => {
-      userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
-    })
+    await user.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
     await waitFor(() => {
       expect(screen.getByRole('textbox', { name: 'Réponse' })).toHaveValue('Charlie')
     })
 
-    act(() => {
-      userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
-    })
+    await user.click(screen.getByRole('button', { name: 'Répondre' }))
     await waitFor(() => {
       expect(mockAxios).toHaveBeenCalledWith('/api/answer', { answer: 'Charlie', id: props.id })
     })
@@ -77,28 +71,25 @@ describe('Trivia.view', () => {
   })
 
   test('it should display WS error', async () => {
+    const user = userEvent.setup()
     mockAxios.mockRejectedValue({})
     render(<Trivia {...props} />)
 
-    act(() => {
-      userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
-    })
+    await user.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
     await waitFor(() => {
       expect(screen.getByRole('textbox', { name: 'Réponse' })).toHaveValue('Charlie')
     })
 
-    act(() => {
-      userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
-    })
+    await user.click(screen.getByRole('button', { name: 'Répondre' }))
     await waitFor(() => {
       expect(mockAxios).toHaveBeenCalledWith('/api/answer', { answer: 'Charlie', id: props.id })
+      expect(screen.getByRole('alert')).toBeInTheDocument()
+      expect(screen.getByRole('alert').innerHTML).toMatch('Une erreur est survenue')
     })
-
-    expect(screen.getByRole('alert')).toBeInTheDocument()
-    expect(screen.getByRole('alert').innerHTML).toMatch('Une erreur est survenue')
   })
 
   test('it should reset state when click next', async () => {
+    const user = userEvent.setup()
     mockAxios.mockResolvedValue({
       data: {
         success: true,
@@ -111,24 +102,18 @@ describe('Trivia.view', () => {
     })
     render(<Trivia {...props} />)
 
-    act(() => {
-      userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
-    })
+    await user.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
     await waitFor(() => {
       expect(screen.getByRole('textbox', { name: 'Réponse' })).toHaveValue('Charlie')
     })
 
-    act(() => {
-      userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
-    })
+    await user.click(screen.getByRole('button', { name: 'Répondre' }))
     await waitFor(() => {
       expect(mockAxios).toHaveBeenCalledWith('/api/answer', { answer: 'Charlie', id: props.id })
       expect(screen.getByRole('application')).toBeInTheDocument()
     })
 
-    act(() => {
-      userEvent.click(screen.getByRole('button', { name: 'Suite' }))
-    })
+    await user.click(screen.getByRole('button', { name: 'Suite' }))
     await waitFor(() => {
       expect(screen.queryByRole('application')).toBeNull()
     })

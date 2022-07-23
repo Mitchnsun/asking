@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Question from './Question'
 
@@ -12,10 +12,6 @@ jest.mock('next/link', () => {
 })
 
 describe('components/Question', () => {
-  beforeAll(() => {
-    userEvent.setup()
-  })
-
   test('it should render the question with textbox', () => {
     render(
       <Question
@@ -34,6 +30,7 @@ describe('components/Question', () => {
   })
 
   test('it should submit answer', async () => {
+    const user = userEvent.setup()
     const props = {
       question: 'Quel est le premier président de la Vième République ?',
       category: 'HIS',
@@ -46,31 +43,26 @@ describe('components/Question', () => {
       expect(screen.getByText(props.question)).toBeInTheDocument()
     })
 
-    act(() => {
-      userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
-    })
+    await user.click(screen.getByRole('button', { name: 'Répondre' }))
     await waitFor(() => {
       expect(props.onSubmit).not.toHaveBeenCalled()
       expect(screen.getByText('Indiquer votre réponse')).toBeInTheDocument()
     })
 
-    act(() => {
-      userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
-    })
+    await user.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
     await waitFor(() => {
       expect(screen.queryByText('Indiquer votre réponse')).toBeNull()
       expect(screen.getByRole('textbox', { name: 'Réponse' })).toHaveValue('Charlie')
     })
 
-    act(() => {
-      userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
-    })
+    await user.click(screen.getByRole('button', { name: 'Répondre' }))
     await waitFor(() => {
       expect(props.onSubmit).toHaveBeenCalledWith({ answer: 'Charlie' }, expect.anything())
     })
   })
 
   test('it should display link to next question', async () => {
+    const user = userEvent.setup()
     const props = {
       question: 'Quel est le premier président de la Vième République ?',
       category: 'HIS',
@@ -79,16 +71,12 @@ describe('components/Question', () => {
       onSubmit: jest.fn(),
     }
     const { rerender } = render(<Question {...props} />)
-    act(() => {
-      userEvent.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
-    })
+    await user.type(screen.getByRole('textbox', { name: 'Réponse' }), 'Charlie')
     await waitFor(() => {
       expect(screen.getByRole('textbox', { name: 'Réponse' })).toHaveValue('Charlie')
     })
 
-    act(() => {
-      userEvent.click(screen.getByRole('button', { name: 'Répondre' }))
-    })
+    await user.click(screen.getByRole('button', { name: 'Répondre' }))
     await waitFor(() => {
       expect(props.onSubmit).toHaveBeenCalledWith({ answer: 'Charlie' }, expect.anything())
     })
@@ -96,9 +84,7 @@ describe('components/Question', () => {
     rerender(<Question {...props} nextURI="/trivia/1234" />)
     expect(screen.queryByRole('button', { name: 'Répondre' })).toBeNull()
 
-    act(() => {
-      userEvent.click(screen.getByRole('button', { name: 'Suite' }))
-    })
+    await user.click(screen.getByRole('button', { name: 'Suite' }))
     await waitFor(() => {
       expect(props.reset).toHaveBeenCalled()
     })
