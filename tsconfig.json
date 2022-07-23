@@ -48,6 +48,7 @@
     },
     "incremental": true,
     "tsBuildInfoFile": "./buildcache/front-end",
+    "isolatedModules": true
   },
   "include": [
     "next-env.d.ts",
